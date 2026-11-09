@@ -1,58 +1,120 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Gestão para Escola de Ginástica
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Projeto final desenvolvido em **Laravel** para gerenciar turmas, alunos, responsáveis, mensalidades e presenças de uma escola de ginástica.
 
-## About Laravel
+> **Autor:** [seu nome]
+> **Curso / Instituição:** [curso e escola]
+> **Ano:** 2026
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Sobre o projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+O sistema permite que os professores (operadores do sistema) façam login e administrem o dia a dia da escola: cadastrar turmas e alunos, registrar responsáveis, controlar mensalidades e marcar presenças, além de gerar relatórios em PDF.
 
-## Learning Laravel
+## Funcionalidades
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Login de professores (autenticação manual por sessão, com middlewares `CheckIsLogged` e `CheckIsNotLogged`)
+- Dashboard com acesso rápido às listagens de turmas e alunos
+- CRUD de **turmas** (nome, nível, dias da semana)
+- CRUD de **alunos** (nome, turma, data de nascimento, nome do responsável)
+- Ao clicar em uma turma, exibe a lista dos alunos dela
+- Cadastro de **responsáveis**
+- Controle de **mensalidades** (vinculadas ao aluno)
+- Registro de **presenças**
+- Geração de **relatórios em PDF**
+- **Soft deletes** (exclusão lógica, permitindo recuperar registros)
+- [Segunda funcionalidade escolhida: a definir]
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Tecnologias utilizadas
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- PHP / Laravel 12
+- MySQL [confirmar o banco usado]
+- Bootstrap e Font Awesome
+- barryvdh/laravel-dompdf (relatórios em PDF)
 
-## Agentic Development
+## Modelo de dados
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+| Tabela | Descrição |
+|---|---|
+| `users` | Professores que operam o sistema |
+| `turmas` | Turmas da escola (nome, nível, dias da semana) |
+| `alunos` | Alunos (pertencem a uma turma) |
+| `responsaveis` | Responsáveis pelos alunos |
+| `mensalidades` | Mensalidades, ligadas ao aluno (`aluno_id`) |
+| `presencas` | Registro de presença dos alunos |
+
+**Relacionamentos principais**
+
+- Uma turma tem vários alunos (`Turma hasMany Aluno`)
+- Cada aluno pertence a uma turma (`Aluno belongsTo Turma`)
+- Cada mensalidade pertence a um aluno
+
+## Requisitos
+
+- PHP 8.2 ou superior
+- Composer
+- MySQL
+- Node.js e NPM (se for compilar assets)
+
+## Como instalar e rodar
 
 ```bash
-composer require laravel/boost --dev
+# 1. Clonar o repositório
+git clone [url-do-repositorio]
+cd [nome-da-pasta]
 
-php artisan boost:install
+# 2. Instalar as dependências
+composer install
+
+# 3. Configurar o ambiente
+cp .env.example .env
+php artisan key:generate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Edite o arquivo `.env` com os dados do seu banco de dados:
 
-## Contributing
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=nome_do_banco
+DB_USERNAME=seu_usuario
+DB_PASSWORD=sua_senha
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+# 4. Criar as tabelas e popular o banco
+php artisan migrate --seed
 
-## Code of Conduct
+# 5. Iniciar o servidor
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Acesse em: http://localhost:8000
 
-## Security Vulnerabilities
+## Acesso ao sistema
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+O seeder cria um usuário inicial para o primeiro acesso:
 
-## License
+- **E-mail:** [email do seeder]
+- **Senha:** [senha do seeder]
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Estrutura do projeto
+
+```
+app/
+ ├── Http/
+ │   ├── Controllers/    # Controllers (validação feita diretamente neles)
+ │   └── Middleware/     # CheckIsLogged e CheckIsNotLogged
+ └── Models/             # User, Turma, Aluno, Responsavel, Mensalidade, Presenca
+database/
+ ├── migrations/
+ └── seeders/
+resources/views/
+ └── layouts/main_layout.blade.php
+```
+
+## Licença
+
+Projeto desenvolvido para fins acadêmicos.
